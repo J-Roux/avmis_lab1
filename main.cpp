@@ -13,8 +13,9 @@ using namespace std;
 template <size_t col, size_t row, class T>
 class Matrix
 {
-	T data[col][row];
+	
 public:
+	T data[col][row];
 	Matrix(function<T()> init)
 	{
 		for(size_t i = 0; i < col; i++)
@@ -25,15 +26,22 @@ public:
 			}
 		}
 	}
+	
 	static Matrix construct(function<T()> init)
 	{
 		return Matrix(init);
 	};
+	
+	Matrix() = default;
+	Matrix(const Matrix&) = default;
+	Matrix& operator = (const Matrix&) = default;
+	
+	
 };
 
 
-using Mat = Matrix<3, 3, int>;
-//using BMat = Matrix<1000, 1000, Mat>;
+using Mat = Matrix<3, 3, double>;
+using BMat = Matrix<1000, 1000, Mat>;
 
 
 
@@ -42,8 +50,8 @@ Mat bar(){ return Mat(rand); }
 
 int main(int argc, char** argv)
 {
-	auto f = std::bind(&Mat::construct, rand);
-	auto mat = new Matrix<1000, 1000, Mat>(&bar);
+	auto init = std::bind(&Mat::construct, []{ return double(rand()) / RAND_MAX ; });
+	auto mat = new BMat(init);
 	return 0;
 }
 
