@@ -1,0 +1,1 @@
+-ftree-vectorizer-verbose=2  -ftree-vectorize -ffast-math -msse2 -msse -msse3 -std=c11 -ftree-slp-vectorize
