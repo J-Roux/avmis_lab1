@@ -14,7 +14,7 @@
 int main(int argc, char** argv)
 {
 
-
+/*
 	double**** __restrict a = (double****)calloc(1000, sizeof(double***));
 	double**** __restrict b = (double****)calloc(1000, sizeof(double***));
 	double**** __restrict c = (double****)calloc(1000, sizeof(double***));
@@ -33,9 +33,9 @@ int main(int argc, char** argv)
 			c[i][j] = (double**)calloc(3, sizeof(double*));
 			for(int k = 0; k < 3; k++)
 			{
-				a[i][j][k] = (double*)calloc(3, sizeof(double));
-				b[i][j][k] = (double*)calloc(3, sizeof(double));
-				c[i][j][k] = (double*)calloc(3, sizeof(double));
+				a[i][j][k] = (double*)aligned_alloc(sizeof(double),3 * sizeof(double));
+				b[i][j][k] = (double*)aligned_alloc(sizeof(double),3 * sizeof(double));
+				c[i][j][k] = (double*)aligned_alloc(sizeof(double),3 * sizeof(double));
 				for(int l = 0; l < 3; l++)
 				{
 					a[i][j][k][l] = 0;
@@ -49,7 +49,8 @@ int main(int argc, char** argv)
 	double**** x = (double****)__builtin_assume_aligned(a, 8);
 	double**** y = (double****)__builtin_assume_aligned(b, 8);
 	double**** z = (double****)__builtin_assume_aligned(c, 8);
-
+	*/
+/*
 	double *acc = (double *)calloc(3, sizeof(double));
 	for(int i1 = 0; i1 < 1000; i1++)
 	{
@@ -59,11 +60,11 @@ int main(int argc, char** argv)
 			{
 				for(int i = 0; i < 3; i++)
 				{
-					for(int j = 0; j < 3; j++)
+					for(int k = 0; k < 3; k++)
 					{
-						for(int k = 0; k < 3; k++)
+						for(int j = 0; j < 3; j++)
 						{
-								z[i1][j1][i][j] += x[k1][j1][k][j] * y[j1][k1][k][j];
+								z[i1][j1][i][j] += x[k1][j1][i][j] * y[j1][k1][i][j];
 						}
 
 					}
@@ -71,7 +72,39 @@ int main(int argc, char** argv)
 			}
 		}
 	}
-    printf("%f", z[0][0][0][0]);
+	
+	for(int k = 0; k < 100; k++)
+	{
+		z[0][0][0][k] += x[0][0][0][k] * y[0][0][0][k];
+	} */
+	
+	
+	
+	
+	double **a = (double**)calloc(3,  sizeof(double*));
+	double **b = (double**)calloc(3, sizeof(double*));
+	double **c = (double**)calloc(3, sizeof(double*));
+	for(int i = 0; i < 3; i++)
+	{
+			a[i] = (double*)calloc(3,sizeof(double));
+			b[i] = (double*)calloc(3,sizeof(double));
+			c[i] = (double*)calloc(3, sizeof(double));
+	}
+	
+				for(int i = 0; i < 3; i++)
+				{
+					for(int j = 0; j < 3; j++)
+					{
+						for(int k = 0; k < 3; k++)
+						{
+							a[j][k] = b[i][j] * c[j][k];
+						}
+
+					}
+				}
+	printf("%f", a[0][0]);
+	
+  //  printf("%f", z[0][0][0][0]);
 	//cout << std::clock() - start << endl;
 	return 0;
 }
